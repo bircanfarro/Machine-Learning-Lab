@@ -15,6 +15,7 @@ At the end of each part, we will do a **code review** withiin each group. Detail
 ### Problem 1: Dataset Import & Cleaning
 Check **"Profit"** and **"Sales"** in the dataset, convert these two columns to numeric type. 
 
+
 ```{r}
 
 #path = ".\data\Orders.csv"

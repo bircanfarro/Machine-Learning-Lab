@@ -18,21 +18,12 @@ Check **"Profit"** and **"Sales"** in the dataset, convert these two columns to 
 
 ```{r}
 
-#df_orders$Profit
-
-#summary(df_orders) 
-#summary(df_orders)
-#str(df_orders)
-#str(df_orders)
 #path = ".\data\Orders.csv"
 path = "./data/Orders.csv"
 df_orders <- read.csv(path, stringsAsFactors = F)
-df_returns <- read.csv(path, stringsAsFactors = F)
 
 df_orders$Profit = as.numeric(gsub("[$,]", "", df_orders$Profit))
 df_orders$Sales = as.numeric(gsub("[$,]", "", df_orders$Sales))
-
-View(select(df_orders,Profit1))
 
 ```
 

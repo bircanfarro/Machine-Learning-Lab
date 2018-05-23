@@ -16,6 +16,7 @@ At the end of each part, we will do a **code review** withiin each group. Detail
 Check **"Profit"** and **"Sales"** in the dataset, convert these two columns to numeric type. 
 
 ```{r}
+<<<<<<< HEAD
 df_orders <- read.csv('./data/Orders.csv', stringsAsFactors = F)
 df_returns <- read.csv('./data/Returns.csv', stringsAsFactors = F)
 ```
@@ -30,6 +31,15 @@ df_orders$Profit1
 #summary(df_orders)
 #str(df_orders)
 #str(df_orders)
+=======
+wpath = ".\data\Orders.csv"
+mpath = "./data/Orders.csv"
+df_orders <- read.csv(mpath, stringsAsFactors = F)
+df_returns <- read.csv(mpath, stringsAsFactors = F)
+
+df_orders$Profit = as.numeric(orders$Profit)
+df_orders$Sales = as.numeric(orders$Sales)
+>>>>>>> cf4bf52e7c2b5d9b10acb3430cc8f72c1a12f5d9
 
 ```
 

@@ -34,8 +34,8 @@ path = "./data/Orders.csv"
 df_orders <- read.csv(path, stringsAsFactors = F)
 df_returns <- read.csv(path, stringsAsFactors = F)
 
-df_orders$Profit1 = as.numeric(gsub("[$,]", "", df_orders$Profit))
-df_orders$Sales1 = as.numeric(gsub("[$,]", "", df_orders$Sales))
+df_orders$Profit = as.numeric(gsub("[$,]", "", df_orders$Profit))
+df_orders$Sales = as.numeric(gsub("[$,]", "", df_orders$Sales))
 
 View(select(df_orders,Profit1))
 

@@ -122,6 +122,21 @@ rename(returns_column,return_count = n)
 - Do forget to `set.seed()` before the spilt to make your result reproducible.
 - **Note:** We are not looking for the best tuned model in the lab so don't spend too much time on grid search. Focus on model evaluation and the business use case of each model.
 
+```{r}
+library(tree)
+library(caret)
+set.seed(0)
+model_source = select(returns_column, -ends_with('ID'))
+partition = createDataPartition(model_source$Returned,p= .2)
+test_set = model_source[partition$Resample1,]
+training_set = model_source[-partition$Resample1,]
+
+classifier = tree(Returned ~ ., data=training_set)
+plot(classifier)
+#I have no idea why this tree does not seem to be doing anything useful.
+
+```
+
 
 ### Problem 6: Evaluating Models
 - What is the best metric to evaluate your model. Is accuracy good for this case?

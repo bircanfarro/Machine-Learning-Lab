@@ -36,7 +36,7 @@ df_orders$Order.Date = as.Date(df_orders$Order.Date,"%m/%d/%y")
     2. Is the seasonal trend the same for different categories?
 
 - ***Hint:*** For each order, it has an attribute called `Quantity` that indicates the number of product in the order. If an order contains more than one product, there will be multiple observations of the same order.
-```
+```{r}
 
 ```
 
@@ -71,21 +71,46 @@ Now your manager has a basic understanding of why customers returned orders. Nex
 #### Step 1: Create the dependent variable
 - First of all, we need to generate a categorical variable which indicates whether an order has been returned or not.
 - ***Hint:*** the returned orders’ IDs are contained in the dataset “returns”
+```{r}
+library(dplyr)
+df_returns <- read.csv('./data/Returns.csv', stringsAsFactors = F)
+df_orders_with_returns = merge(df_orders, select(df_returns, Order.ID,Returned), all.x= T)
+df_orders_with_returns$Returned[is.na(df_orders_with_returns$Returned)] = "No"
 
+```
 
 #### Step 2:
 - Your manager believes that **how long it took the order to ship** would affect whether the customer would return it or not. 
 - He wants you to generate a feature which can measure how long it takes the company to process each order.
 - ***Hint:*** Process.Time = Ship.Date - Order.Date
+```{r}
+df_process_time=mutate(df_orders_with_returns,Ship.Date = as.Date(Ship.Date,"%m/%d/%y"), Process.Time = Ship.Date - Order.Date)
 
+#Double-check
+View(select(df_process_time,Order.Date,Ship.Date, Process.Time))
+```
 
 #### Step 3:
 
 - If a product has been returned before, it may be returned again. 
-- Let us generate a feature indictes how many times the product has been returned before.
+- Let us generate a feature that indicates how many times the product has been returned before.
 - If it never got returned, we just impute using 0.
 - ***Hint:*** Group by different Product.ID
+```{r}
+#product_return_counts = group_by(df_process_time,Product.ID) %>% 
+  #tally(Returned=="Yes")
+prc1 = group_by(df_process_time,Product.ID) %>% 
+  count(m=Returned=="Yes") %>% 
+  filter(m == TRUE)
 
+returns_column = merge(df_process_time, prc1, by="Product.ID", all.x=T) %>% 
+  select(-m)
+returns_column$n[is.na(returns_column$n)] = 0
+rename(returns_column,return_count = n)
+
+#prc2= group_by(df_process_time,Product.ID) %>% 
+  #summarise(Returned=="Yes")
+```
 
 ### Problem 5: Fitting Models
 
@@ -96,6 +121,21 @@ Now your manager has a basic understanding of why customers returned orders. Nex
 - Not that there are only less than 5% of the orders have been returned, so you should consider using the `createDataPartition` function from `caret` package that does a **stratified** random split of the data.
 - Do forget to `set.seed()` before the spilt to make your result reproducible.
 - **Note:** We are not looking for the best tuned model in the lab so don't spend too much time on grid search. Focus on model evaluation and the business use case of each model.
+
+```{r}
+library(tree)
+library(caret)
+set.seed(0)
+model_source = select(returns_column, -ends_with('ID'))
+partition = createDataPartition(model_source$Returned,p= .2)
+test_set = model_source[partition$Resample1,]
+training_set = model_source[-partition$Resample1,]
+
+classifier = tree(Returned ~ ., data=training_set)
+plot(classifier)
+#I have no idea why this tree does not seem to be doing anything useful.
+
+```
 
 
 ### Problem 6: Evaluating Models

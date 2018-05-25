@@ -15,18 +15,22 @@ At the end of each part, we will do a **code review** withiin each group. Detail
 ### Problem 1: Dataset Import & Cleaning
 Check **"Profit"** and **"Sales"** in the dataset, convert these two columns to numeric type. 
 
+
 ```{r}
 
 #path = ".\data\Orders.csv"
 path = "./data/Orders.csv"
 df_orders <- read.csv(path, stringsAsFactors = F)
 
+```
+
+
+```{r}
+
 df_orders$Profit = as.numeric(gsub("[$,]", "", df_orders$Profit))
 df_orders$Sales = as.numeric(gsub("[$,]", "", df_orders$Sales))
 
 ```
-
-
 
 ### Problem 2: Inventory Management
 - Retailers that depend on seasonal shoppers have a particularly challenging job when it comes to inventory management. Your manager is making plans for next year's inventory.
@@ -36,6 +40,16 @@ df_orders$Sales = as.numeric(gsub("[$,]", "", df_orders$Sales))
 
 - ***Hint:*** For each order, it has an attribute called `Quantity` that indicates the number of product in the order. If an order contains more than one product, there will be multiple observations of the same order.
 
+```{r}
+library(dplyr)
+
+betterDates <- as.Date(df_orders$Order.Date,format = "%m/%d/%y")
+df_orders %>% mutate(Order.Date1=)
+
+df_orders$Order.Date <- format(as.Date(df_orders$Order.Date), "%Y/%m/%d")
+
+
+```
 
 ### Problem 3: Why did customers make returns?
 - Your manager required you to give a brief report (**Plots + Interpretations**) on returned orders.
